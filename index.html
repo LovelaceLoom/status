@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Lovelace Loom Status</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --border: #e4e6ea;
+    --text: #1b1e23;
+    --muted: #667085;
+    --faint: #98a2b3;
+    --ok: #177b3d;
+    --outage: #b42318;
+    --maintenance: #955d00;
+    --unknown: #6e7781;
+    --accent: var(--unknown);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1116;
+      --card: #171b22;
+      --border: #272d38;
+      --text: #e7eaee;
+      --muted: #9aa4b2;
+      --faint: #6c7684;
+      --ok: #46c26e;
+      --outage: #ff8078;
+      --maintenance: #d9a52f;
+      --unknown: #8b949e;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    width: 100%;
+    max-width: 26rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.25rem 2rem 1.75rem;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04),
+                0 8px 24px rgba(16, 24, 40, 0.05);
+  }
+  .card.ok          { --accent: var(--ok); }
+  .card.outage      { --accent: var(--outage); }
+  .card.maintenance { --accent: var(--maintenance); }
+  .card.unknown     { --accent: var(--unknown); }
+  .overline {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  h1 {
+    font-size: 1.35rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin-top: 0.2rem;
+  }
+  .dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent);
+    display: inline-block;
+    margin: 1.6rem 0 1.1rem;
+  }
+  .state {
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .block + .block { margin-top: 0.85rem; }
+  .block[lang="en"] .state { font-size: 1rem; }
+  .detail {
+    margin-top: 0.25rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .detail:empty { display: none; }
+  .meta {
+    margin-top: 1.5rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--faint);
+  }
+  .meta p + p { margin-top: 0.1rem; }
+  .meta:not(.show) { visibility: hidden; }
+  footer {
+    margin-top: 1.4rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--faint);
+  }
+  footer a {
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  footer a:hover { color: var(--text); }
+  noscript p {
+    margin-top: 1.2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="card unknown" id="card">
+    <p class="overline">Lovelace Loom</p>
+    <h1>ToText</h1>
+    <span class="dot" aria-hidden="true"></span>
+    <div class="block" lang="he" dir="rtl">
+      <p class="state" id="state-he">בודק סטטוס&hellip;</p>
+      <p class="detail" id="detail-he"></p>
+    </div>
+    <div class="block" lang="en">
+      <p class="state" id="state-en">Checking status&hellip;</p>
+      <p class="detail" id="detail-en"></p>
+    </div>
+    <div class="meta" id="meta">
+      <p lang="he" dir="rtl" id="updated-he"></p>
+      <p id="updated-en"></p>
+    </div>
+  </div>
+  <noscript>
+    <p>This page needs JavaScript. The raw status file is at
+       <a href="./status.json">status.json</a>.</p>
+  </noscript>
+  <footer>
+    Contact: <a href="mailto:company@lovelaceloom.com">company@lovelaceloom.com</a>
+  </footer>
+</main>
+<script>
+  "use strict";
+
+  var STATES = {
+    ok:          { cls: "ok",          he: "כל המערכות פועלות כסדרן", en: "All systems operational" },
+    outage:      { cls: "outage",      he: "שיבוש בשירות",                                                          en: "Service disruption" },
+    maintenance: { cls: "maintenance", he: "תחזוקה מתוכננת",                                              en: "Scheduled maintenance" }
+  };
+  var UNKNOWN = { cls: "unknown", he: "הסטטוס אינו זמין כרגע", en: "Status unavailable" };
+
+  var el = function (id) { return document.getElementById(id); };
+
+  function render(state, detail, updated) {
+    el("card").className = "card " + state.cls;
+    el("state-he").textContent = state.he;
+    el("state-en").textContent = state.en;
+    el("detail-he").textContent = (detail && typeof detail.he === "string") ? detail.he : "";
+    el("detail-en").textContent = (detail && typeof detail.en === "string") ? detail.en : "";
+    if (updated) {
+      var he = new Intl.DateTimeFormat("he", { dateStyle: "medium", timeStyle: "short" }).format(updated);
+      var en = new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(updated);
+      el("updated-he").textContent = "עודכן לאחרונה: " + he;
+      el("updated-en").textContent = "Last updated: " + en;
+      el("meta").classList.add("show");
+    } else {
+      el("updated-he").textContent = "";
+      el("updated-en").textContent = "";
+      el("meta").classList.remove("show");
+    }
+  }
+
+  function load() {
+    fetch("./status.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (res) {
+        if (!res.ok) { throw new Error("HTTP " + res.status); }
+        return res.json();
+      })
+      .then(function (data) {
+        var app = data && data.apps && data.apps.totext;
+        var state = app && STATES[app.status];
+        if (!state) { throw new Error("unrecognized payload"); }
+        var updated = app.updatedAt ? new Date(app.updatedAt) : null;
+        if (updated && isNaN(updated.getTime())) { updated = null; }
+        render(state, app.detail || null, updated);
+      })
+      .catch(function () {
+        render(UNKNOWN, null, null);
+      });
+  }
+
+  load();
+  setInterval(load, 60000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") { load(); }
+  });
+</script>
+</body>
+</html>
