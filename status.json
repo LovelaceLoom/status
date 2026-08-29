@@ -5,10 +5,10 @@
       "status": "outage",
       "phase": "identified",
       "detail": {
-        "he": "ספק התשתית שלנו (AWS) הגביל זמנית חלק מהשירותים בחשבון. תמלולים חדשים נכשלים כרגע; ההקלטות והתמלולים הקיימים שלך שמורים ובטוחים במכשיר. אנחנו בקשר רציף איתם לשחרור ההגבלה.",
-        "en": "Our infrastructure provider (AWS) has temporarily limited some services on our account. New transcriptions are failing right now; your existing recordings and notes are safe on your device. We are actively working with them to lift the limitation."
+        "he": "אנחנו חווים שיבוש זמני אצל אחד מספקי התשתית שלנו. תמלולים חדשים עלולים להיכשל כרגע; ההקלטות והתמלולים הקיימים שלך שמורים ובטוחים במכשיר. אנחנו מטפלים בזה במלוא המרץ ונעדכן ברגע שהשירות יחזור.",
+        "en": "We are experiencing a temporary disruption with one of our infrastructure providers. New transcriptions may fail right now; your existing recordings and notes are safe on your device. We are working on it and will update the moment service is restored."
       },
-      "updatedAt": "2026-08-29T18:35:00Z"
+      "updatedAt": "2026-08-29T19:05:00Z"
     }
   }
 }
