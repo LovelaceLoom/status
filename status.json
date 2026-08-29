@@ -2,9 +2,13 @@
   "schemaVersion": 1,
   "apps": {
     "totext": {
-      "status": "ok",
-      "detail": null,
-      "updatedAt": "2026-08-29T00:00:00Z"
+      "status": "outage",
+      "phase": "identified",
+      "detail": {
+        "he": "ספק התשתית שלנו (AWS) הגביל זמנית חלק מהשירותים בחשבון. תמלולים חדשים נכשלים כרגע; ההקלטות והתמלולים הקיימים שלך שמורים ובטוחים במכשיר. אנחנו בקשר רציף איתם לשחרור ההגבלה.",
+        "en": "Our infrastructure provider (AWS) has temporarily limited some services on our account. New transcriptions are failing right now; your existing recordings and notes are safe on your device. We are actively working with them to lift the limitation."
+      },
+      "updatedAt": "2026-08-29T18:35:00Z"
     }
   }
 }
