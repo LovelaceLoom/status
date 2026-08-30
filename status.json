@@ -2,13 +2,10 @@
   "schemaVersion": 1,
   "apps": {
     "totext": {
-      "status": "outage",
-      "phase": "identified",
-      "detail": {
-        "he": "אנחנו חווים שיבוש זמני אצל אחד מספקי התשתית שלנו. תמלולים חדשים עלולים להיכשל כרגע; ההקלטות והתמלולים הקיימים שלך שמורים ובטוחים במכשיר. אנחנו מטפלים בזה במלוא המרץ ונעדכן ברגע שהשירות יחזור.",
-        "en": "We are experiencing a temporary disruption with one of our infrastructure providers. New transcriptions may fail right now; your existing recordings and notes are safe on your device. We are working on it and will update the moment service is restored."
-      },
-      "updatedAt": "2026-08-29T19:05:00Z"
+      "status": "ok",
+      "phase": "resolved",
+      "detail": null,
+      "updatedAt": "2026-08-30T11:45:00Z"
     }
   }
 }
