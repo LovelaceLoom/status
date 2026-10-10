@@ -7,5 +7,10 @@
       "detail": null,
       "updatedAt": "2026-08-30T11:45:00Z"
     }
+  },
+  "control": {
+    "payload": "eyJzaWduZWRBdCI6MTc5MTY1NzQwMiwidGVsZW1ldHJ5Ijp7InNlbnRyeSI6dHJ1ZSwicG9zdGhvZyI6dHJ1ZSwiYXBwc2ZseWVyIjp0cnVlLCJlbnZpcm9ubWVudHMiOlsidGVzdGZsaWdodCJdLCJleHBpcmVzQXQiOjE3OTI4MDAwMDAsIm1pbkJ1aWxkIjoyNjB9fQ==",
+    "signature": "QaM2DU0QxramLrN29Via/K8XeiHjmcA3w0tIcg0jlzfXotlrbjVR0USyHCFDUciHN6ebl69gnq+FHoMS4DPwCA==",
+    "keyId": "k1"
   }
 }
